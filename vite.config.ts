@@ -32,6 +32,14 @@ export default defineConfig({
       },
     },
   },
+  resolve: {
+    alias: [
+      {
+        find: /\/@\//,
+        replacement: '',
+      },
+    ],
+  },
   // build: {
   //   minify: 'terser',
   //   terserOptions: {
