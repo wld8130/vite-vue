@@ -7,11 +7,13 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
+    "newpreview": "vue-tsc && vite build && vite preview",
     "prepare": "husky install"
   },
   "dependencies": {
     "ant-design-vue": "^4.0.1",
-    "vue": "^3.3.4"
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.4"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.4.1",

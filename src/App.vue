@@ -1,15 +1,21 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import { ref } from 'vue';
+import HelloWorld from './components/HelloWorld.vue';
+const colorPrimary = ref('#00b96b');
+const handleClickSwitch = () => {
+  colorPrimary.value = '#aab96b'
+};
 </script>
 
 <template>
   <a-config-provider
     :theme="{
       token: {
-        colorPrimary: '#00b96b',
+        colorPrimary,
       },
     }"
   >
+    <a-button type="primary" @click="handleClickSwitch">切换</a-button>
     <div>
       <a href="https://vitejs.dev" target="_blank">
         <img src="/vite.svg" class="logo" alt="Vite logo" />

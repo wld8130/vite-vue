@@ -16,8 +16,7 @@ const count = ref(0);
       <code>components/HelloWorld.vue</code> to test HMR
     </p>
   </div>
-
-  <a-button type="primary"></a-button>
+  <a-button type="primary">白痴</a-button>
 </template>
 
 <style scoped>

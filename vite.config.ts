@@ -32,13 +32,14 @@ export default defineConfig({
       },
     },
   },
-  build: {
-    terserOptions: {
-      compress: {
-        drop_console: true,
-      },
-    },
-  },
+  // build: {
+  //   minify: 'terser',
+  //   terserOptions: {
+  //     compress: {
+  //       drop_console: true,
+  //     },
+  //   },
+  // },
   plugins: [
     vue(),
     Components({
