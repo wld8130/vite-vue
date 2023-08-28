@@ -1,5 +1,17 @@
 import { createApp } from 'vue';
 import './style.css';
 import App from './App.vue';
+import router from '/@/router';
+import { setupStore } from '/@/store';
 
-createApp(App).mount('#app');
+const bootstrap = () => {
+  const app = createApp(App);
+
+  app.use(router);
+  // 配置 Store
+  setupStore(app);
+
+  app.mount('#app');
+};
+
+bootstrap();
