@@ -17,7 +17,9 @@ const colorPrimary = ref('#00b96b');
     }"
     :locale="locale"
   >
+    <!-- <App> -->
     <RouterView />
+    <!-- </App> -->
   </AConfigProvider>
 </template>
 
