@@ -22,7 +22,7 @@
     <Row>
       <Col :span="24" class="margin-bottom-12">主题色</Col>
       <Col :span="24">
-        <Input type="color" class="width-128" />
+        <Input type="color" class="width-128" v-model:value="appStore.themeColor" />
       </Col>
       <Col :span="24">
         <Divider />
@@ -37,8 +37,11 @@ import {
   SettingOutlined,
 } from '@ant-design/icons-vue';
 import { FloatButton, Drawer, Row, Col, Input, Divider } from "ant-design-vue";
+import useAppStore from '/@/store/modules/app';
 
 const open = ref<boolean>(false);
+
+const appStore = useAppStore();
 
 const handleShowModal = () => {
   open.value = true;

@@ -7,6 +7,7 @@ import type { NotificationInstance } from 'ant-design-vue/es/notification/interf
 
 const useAppStore = defineStore('app', () => {
   const count = ref(0);
+  const themeColor = ref<string>('#00b96b');
   const message = ref<MessageInstance>();
   const notification = ref<NotificationInstance>();
   const modal = ref<Omit<ModalStaticFunctions, 'warn'>>();
@@ -27,8 +28,14 @@ const useAppStore = defineStore('app', () => {
     count.value += 1;
   };
 
+  const changeThemeColor = (color: string) => {
+    themeColor.value = color;
+  };
+
   return {
     count,
+    themeColor,
+    changeThemeColor,
     addCount,
     message,
     notification,
