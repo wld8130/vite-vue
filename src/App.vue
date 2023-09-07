@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+// import { ref } from 'vue';
 import zhCN from 'ant-design-vue/es/locale/zh_CN';
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
+import useAppStore from '/@/store/modules/app';
 dayjs.locale('zh-cn');
 const locale = zhCN;
-const colorPrimary = ref('#00b96b');
+const appStore = useAppStore();
+// const colorPrimary = ref('#00b96b');
 </script>
 
 <template>
   <AConfigProvider
     :theme="{
       token: {
-        colorPrimary,
+        colorPrimary: appStore.themeColor,
       },
     }"
     :locale="locale"

@@ -22,7 +22,7 @@
     <Row>
       <Col :span="24" class="margin-bottom-12">主题色</Col>
       <Col :span="24">
-        <Input type="color" class="width-128" v-model:value="appStore.themeColor" />
+        <Input type="color" class="width-128" :value="themeColor" @change="handleChangeColor" @blur="handleBlurColor" />
       </Col>
       <Col :span="24">
         <Divider />
@@ -39,13 +39,21 @@ import {
 import { FloatButton, Drawer, Row, Col, Input, Divider } from "ant-design-vue";
 import useAppStore from '/@/store/modules/app';
 
-const open = ref<boolean>(false);
-
 const appStore = useAppStore();
+const open = ref<boolean>(false);
+const themeColor = ref<string>(appStore.themeColor);
 
 const handleShowModal = () => {
   open.value = true;
 };
+
+const handleChangeColor = (e: any) => {
+  themeColor.value = e.target.value;
+};
+
+const handleBlurColor = () => {
+  appStore.changeThemeColor(themeColor.value)
+}
 
 const afterOpenChange = () => {
   // 切换抽屉时动画结束后的回调
