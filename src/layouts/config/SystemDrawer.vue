@@ -11,49 +11,49 @@
       <SettingOutlined v-if="!open" />
     </template>
   </FloatButton>
-  <Drawer
-    v-model:open="open"
-    :headerStyle="{
-      display: 'none'
-    }"
-    placement="right"
-    @after-open-change="afterOpenChange"
-  >
-    <Row>
-      <Col :span="24" class="margin-bottom-12">主题色</Col>
-      <Col :span="24">
-        <Input type="color" class="width-128" :value="themeColor" @change="handleChangeColor" @blur="handleBlurColor" />
-      </Col>
-      <Col :span="24">
-        <Divider />
-      </Col>
-    </Row>
+  <Drawer v-model:open="open" placement="right" @after-open-change="afterOpenChange">
+    <template #extra>
+      <a-button type="primary" @click="onSure">确定</a-button>
+    </template>
+    <Form layout="vertical">
+      <FormItem label="主题色">
+        <Input type="color" class="width-128" v-model:value="formData.themeColor" />
+      </FormItem>
+      <Divider />
+    </Form>
   </Drawer>
 </template>
 
 <script lang="ts" setup name="SystemDrawer">
-import { ref } from 'vue';
+import { ref, reactive, UnwrapRef } from 'vue';
 import {
   SettingOutlined,
 } from '@ant-design/icons-vue';
-import { FloatButton, Drawer, Row, Col, Input, Divider } from "ant-design-vue";
+import { FloatButton, Drawer, Input, Divider, Form, FormItem } from "ant-design-vue";
 import useAppStore from '/@/store/modules/app';
+import { isEqual } from '/@/utils/common';
 
 const appStore = useAppStore();
 const open = ref<boolean>(false);
-const themeColor = ref<string>(appStore.themeColor);
+
+interface FormState {
+  themeColor: string
+}
+
+const formData: UnwrapRef<FormState> = reactive({
+  themeColor: appStore.themeColor
+})
 
 const handleShowModal = () => {
   open.value = true;
 };
 
-const handleChangeColor = (e: any) => {
-  themeColor.value = e.target.value;
+const onSure = () => {
+  if (!isEqual(formData.themeColor, appStore.themeColor)) {
+    appStore.changeThemeColor(formData.themeColor);
+  }
+  open.value = false;
 };
-
-const handleBlurColor = () => {
-  appStore.changeThemeColor(themeColor.value)
-}
 
 const afterOpenChange = () => {
   // 切换抽屉时动画结束后的回调
