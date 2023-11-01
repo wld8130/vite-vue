@@ -6,8 +6,10 @@ import type { ModalStaticFunctions } from 'ant-design-vue/es/modal/confirm';
 import type { NotificationInstance } from 'ant-design-vue/es/notification/interface';
 
 const useAppStore = defineStore('app', () => {
-  const count = ref(0);
+  // 主题色
   const themeColor = ref<string>('#00b96b');
+  // 菜单收缩
+  const collapsed = ref<boolean>(false);
   const message = ref<MessageInstance>();
   const notification = ref<NotificationInstance>();
   const modal = ref<Omit<ModalStaticFunctions, 'warn'>>();
@@ -24,19 +26,23 @@ const useAppStore = defineStore('app', () => {
     notification.value = staticFunction.notification;
   })();
 
-  const addCount = () => {
-    count.value += 1;
-  };
-
+  /**
+   * 修改主题色
+   * @param color : 主题色;
+   */
   const changeThemeColor = (color: string) => {
     themeColor.value = color;
   };
 
+  const toggleCollapsed = () => {
+    collapsed.value = !collapsed.value;
+  };
+
   return {
-    count,
     themeColor,
     changeThemeColor,
-    addCount,
+    collapsed,
+    toggleCollapsed,
     message,
     notification,
     modal,

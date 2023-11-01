@@ -7,7 +7,6 @@ import useAppStore from '/@/store/modules/app';
 dayjs.locale('zh-cn');
 const locale = zhCN;
 const appStore = useAppStore();
-// const colorPrimary = ref('#00b96b');
 </script>
 
 <template>
@@ -24,21 +23,3 @@ const appStore = useAppStore();
     <!-- </App> -->
   </AConfigProvider>
 </template>
-
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-  user-select: none;
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
