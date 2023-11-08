@@ -1,3 +1,13 @@
+.w-h-100v {
+  width: 100vw;
+  height: 100vh;
+}
+
+.w-h-100 {
+  width: 100%;
+  height: 100%;
+}
+
 .width-128 {
   width: 128px;
 }
@@ -8,4 +18,8 @@
 
 .margin-bottom-12 {
   margin-bottom: 12px;
+}
+
+.padding-bottom-18 {
+  padding-bottom: 18px;
 }

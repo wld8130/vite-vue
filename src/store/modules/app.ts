@@ -7,7 +7,7 @@ import type { NotificationInstance } from 'ant-design-vue/es/notification/interf
 
 const useAppStore = defineStore('app', () => {
   // 主题色
-  const themeColor = ref<string>('#00b96b');
+  const themeColor = ref<string>('#2F54EB');
   // 菜单收缩
   const collapsed = ref<boolean>(false);
   const message = ref<MessageInstance>();

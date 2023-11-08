@@ -3,9 +3,11 @@ import LayOuts from '/@/layouts/index.vue';
 // import Home from '/@/views/Home/index.vue';
 import About from '/@/views/About/index.vue';
 import NotFound from '/@/views/NotFound/index.vue';
+import Login from '/@/views/Login/index.vue';
 
 const routes = [
   { path: '/', component: LayOuts },
+  { path: '/login', component: Login },
   { path: '/about', component: About },
   // 将匹配所有内容并将其放在 `$route.params.pathMatch` 下
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },

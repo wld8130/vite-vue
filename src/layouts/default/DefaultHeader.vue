@@ -1,7 +1,7 @@
 <template>
   <div class="default-header">
     <div class="default-header-logo">
-      <img :src="LOGO" alt="logo" srcset="" class="default-header-logo-img" />
+      <img :src="LOGO_WORD" alt="logo" srcset="" class="default-header-logo-img" />
     </div>
     <div class="default-header-center">
       <Button type="primary" @click="toggleCollapsed">
@@ -17,7 +17,7 @@
 import { Button } from 'ant-design-vue';
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue';
 import useAppStore from '/@/store/modules/app';
-import LOGO from '/@/assets/img/login-logo.png';
+import LOGO_WORD from '/@/assets/img/logo-word.png';
 
 const appStore = useAppStore();
 
