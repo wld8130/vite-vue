@@ -2,7 +2,7 @@
   <div class="code-img-container" @click="handleClick">
     <Spin v-if="loading" />
     <template v-else>
-      <img v-if="!fialedFlag" :src="imgUrl" alt="code" srcset="" />
+      <img v-if="!isFail" :src="imgUrl" alt="code" srcset="" />
       <div v-else>图片加载失败</div>
     </template>
   </div>
@@ -15,7 +15,7 @@ defineProps({
     type: Boolean,
     default: false
   },
-  fialedFlag: {
+  isFail: {
     type: Boolean,
     default: false
   },
@@ -39,6 +39,7 @@ const handleClick = () => {
   justify-content: center;
   width: 100%;
   height: 100%;
+  overflow: hidden;
   border: 1px solid #D9D9D9;
   border-radius: 8px;
   cursor: pointer;

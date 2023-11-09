@@ -89,10 +89,8 @@ const rules: Record<string, Rule[]> = {
 };
 
 const handleClickCode = () => {
-  console.log('刷新')
   if (props.reFreshCode && typeofFunction(props.reFreshCode)) {
     props.reFreshCode();
-    console.log('刷新first')
   }
 };
 

@@ -7,7 +7,7 @@
       <div class="login-content">
         <LoginForm
           :codeLoading="loading"
-          :codeFailFlag="failFlag"
+          :codeFailFlag="isFail"
           :codeImgUrl="imgUrl"
           :reFreshCode="getCodeImgData"
           @submit="handleSubmit"
@@ -23,10 +23,10 @@ import LoginForm from './LoginForm.vue';
 import { useCodeImage } from './hooks/useCodeImage';
 import { getCodeImgApi } from '/@/api/common';
 
-const { loading, failFlag, imgUrl, getFetchData: getCodeImgData } = useCodeImage(getCodeImgApi);
+const { loading, isFail, imgUrl, uuidCode, getFetchData: getCodeImgData } = useCodeImage(getCodeImgApi);
 
 const handleSubmit = (values: any) => {
-  console.log('formData:', values);
+  console.log('formData:', values, uuidCode);
 };
 </script>
 

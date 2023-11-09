@@ -5,5 +5,6 @@ export function getCodeImgApi() {
   return server.request({
     url: '/captchaImage',
     method: 'get',
+    noToken: true,
   });
 }

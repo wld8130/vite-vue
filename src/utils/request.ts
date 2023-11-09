@@ -1,5 +1,5 @@
-import axios, { InternalAxiosRequestConfig, Canceler } from 'axios';
-import { message } from 'ant-design-vue';
+import axios, { InternalAxiosRequestConfig, Canceler, AxiosResponse } from 'axios';
+import { useMessageKey } from '../hooks/useMessageKey';
 
 declare module 'axios' {
   export interface InternalAxiosRequestConfig {
@@ -15,6 +15,7 @@ const server = axios.create({
   timeout: 10000,
 });
 
+// 记录正在进行的请求
 const pending: any[] = [];
 
 /**
@@ -73,13 +74,23 @@ server.interceptors.request.use(
 );
 
 // 添加响应拦截器
-server.interceptors.response.use(function (response) {
+server.interceptors.response.use((res: AxiosResponse<any>) => {
   // 对响应数据做点什么
-  return response;
+  // 对请求成功的请求删除记录
+  removePending(res.config, null);
+
+  const { code = 200, msg } = res.data;
+
+  // 对不同的code进行处理
+
+  console.log(code, msg);
+
+  return res.data;
 }, function (error) {
   // 对响应错误做点什么
+  const { messageWithKey } = useMessageKey();
   const { config, message: errorMsg } = error;
-  console.log(error);
+  // 对请求成功的请求删除记录
   removePending(config, null);
   let alertMsg = errorMsg;
   if (errorMsg == 'Network Error') {
@@ -101,7 +112,7 @@ server.interceptors.response.use(function (response) {
   } else if (errorMsg.includes('Request failed with status code')) {
     alertMsg = '系统接口' + errorMsg.substr(errorMsg.length - 3) + '异常';
   }
-  message.error(alertMsg);
+  messageWithKey.error(alertMsg);
   return Promise.reject(error);
 });
 
