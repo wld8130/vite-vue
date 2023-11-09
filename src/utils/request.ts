@@ -1,5 +1,7 @@
 import axios, { InternalAxiosRequestConfig, Canceler, AxiosResponse } from 'axios';
 import { useMessageKey } from '../hooks/useMessageKey';
+import Storage from '/@/utils/Storage';
+import { STORAGE_TOKEN, MODE_DEVELOPMENT } from '/@/utils/consts';
 
 declare module 'axios' {
   export interface InternalAxiosRequestConfig {
@@ -17,6 +19,16 @@ const server = axios.create({
 
 // 记录正在进行的请求
 const pending: any[] = [];
+
+const { messageWithKey } = useMessageKey();
+
+/**
+ * 处理请求错误
+ * @param error 错误信息
+ */
+const dealWithRequestError = (error: any): void => {
+  messageWithKey.error(error);
+};
 
 /**
  * 取消重复请求
@@ -59,16 +71,23 @@ server.interceptors.request.use(
     }
 
     // 2.判断是否携带token
+    const token = Storage.getCookie(STORAGE_TOKEN);
 
-    if (!noToken) {
+    if (token && !noToken) {
       Object.assign(config.headers, {
-        Authorization: 'Bearer ' + 'edu_college_token',
+        Authorization: `Bearer ${token}`,
       });
     }
     return config;
   },
-  function (error) {
+  (error) => {
     // 对请求错误做些什么
+    // 处理上上一个请求出错情况
+    // 开发环境对请求错误抛错提醒
+    if (import.meta.env.MODE === MODE_DEVELOPMENT) {
+      dealWithRequestError(error);
+    }
+
     return Promise.reject(error);
   }
 );
@@ -88,7 +107,6 @@ server.interceptors.response.use((res: AxiosResponse<any>) => {
   return res.data;
 }, function (error) {
   // 对响应错误做点什么
-  const { messageWithKey } = useMessageKey();
   const { config, message: errorMsg } = error;
   // 对请求成功的请求删除记录
   removePending(config, null);

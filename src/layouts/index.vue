@@ -7,7 +7,7 @@
     <div>
       Content
       <RouterView />
-      <a-button type="primary">111</a-button>
+      <CodeEditor />
     </div>
     <SystemDrawer />
   </div>
@@ -16,6 +16,7 @@
 <script lang="ts" setup name="Layout">
 import SystemDrawer from '/@/layouts/config/SystemDrawer.vue';
 import DefaultHeader from './default/DefaultHeader.vue';
+import CodeEditor from '/@/components/CodeEditor/index.vue';
 </script>
 
 <style lang="less">

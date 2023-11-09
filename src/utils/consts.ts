@@ -1,2 +1,11 @@
 // message的key
 export const MESSAGE_KEY = '1zxcas123asd';
+
+// storage的key
+export const STORAGE_TOKEN = import.meta.env.VITE_STORAGE_TOKEN || 'token';
+
+// development(开发环境)
+export const MODE_DEVELOPMENT = 'development';
+
+// production(生产环境)
+export const MODE_PRODUCTION = 'production';
