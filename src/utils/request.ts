@@ -1,5 +1,5 @@
 import axios, { InternalAxiosRequestConfig, Canceler, AxiosResponse } from 'axios';
-import { useMessageKey } from '../hooks/useMessageKey';
+import { messageWithKey } from '../hooks/useMessageKey';
 import Storage from '/@/utils/Storage';
 import { STORAGE_TOKEN, MODE_DEVELOPMENT } from '/@/utils/consts';
 
@@ -19,8 +19,6 @@ const server = axios.create({
 
 // 记录正在进行的请求
 const pending: any[] = [];
-
-const { messageWithKey } = useMessageKey();
 
 /**
  * 处理请求错误

@@ -16,3 +16,5 @@ export const useMessageKey = () => {
     messageWithKey,
   };
 };
+
+export const { messageWithKey } = useMessageKey();
