@@ -3,11 +3,13 @@
     <div class="main-header">
       <DefaultHeader />
     </div>
-    <div>Slider</div>
-    <div>
-      Content
-      <RouterView />
-      <CodeEditor />
+    <div class="main-container">
+      <div class="main-slider">
+        <DefaultSlider />
+      </div>
+      <div class="main-content">
+        <RouterView />
+      </div>
     </div>
     <SystemDrawer />
   </div>
@@ -16,11 +18,13 @@
 <script lang="ts" setup name="Layout">
 import SystemDrawer from '/@/layouts/config/SystemDrawer.vue';
 import DefaultHeader from './default/DefaultHeader.vue';
-import CodeEditor from '/@/components/CodeEditor/index.vue';
+import DefaultSlider from './default/DefaultSlider.vue';
 </script>
 
 <style lang="less">
 @main: main;
+@header-height: 64px;
+@slider-width: 272px;
 
 .@{main}-layout {
   width: 100vw;
@@ -29,8 +33,31 @@ import CodeEditor from '/@/components/CodeEditor/index.vue';
 
   .@{main}-header {
     width: 100%;
-    height: 64px;
-    box-shadow: 0 2px 8px 0 rgb(205 209 224 / 15%);
+    height: @header-height;
+    box-shadow: rgb(0 0 0 / 16%)	0 1px	2px	-2px,
+    rgb(0 0 0 / 12%)	0 3px	6px	0,
+    rgb(0 0 0 / 9%)	0 5px	12px	4px;
   }
+
+  .@{main}-container {
+    display: flex;
+    width: 100%;
+    height: calc(100vh - @header-height);
+
+    .@{main}-slider {
+      width: @slider-width;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .@{main}-content {
+      width: calc(100vw - @slider-width);
+      height: 100%;
+      padding: 24px;
+      background: #f8f9fc;
+    }
+  }
+
+
 }
 </style>
