@@ -44,6 +44,10 @@ const useAppStore = defineStore('app', () => {
     locale.value = value;
   };
 
+  const toggleLocale = () => {
+    locale.value = locale.value === 'zh' ? 'en' : 'zh';
+  };
+
   return {
     themeColor,
     changeThemeColor,
@@ -51,6 +55,7 @@ const useAppStore = defineStore('app', () => {
     toggleCollapsed,
     locale,
     changeLocale,
+    toggleLocale,
     message,
     notification,
     modal,
