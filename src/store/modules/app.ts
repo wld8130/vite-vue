@@ -10,6 +10,8 @@ const useAppStore = defineStore('app', () => {
   const themeColor = ref<string>('#2F54EB');
   // 菜单收缩
   const collapsed = ref<boolean>(false);
+  // 国际化
+  const locale = ref<'zh' | 'en'>('zh');
   const message = ref<MessageInstance>();
   const notification = ref<NotificationInstance>();
   const modal = ref<Omit<ModalStaticFunctions, 'warn'>>();
@@ -38,11 +40,17 @@ const useAppStore = defineStore('app', () => {
     collapsed.value = !collapsed.value;
   };
 
+  const changeLocale = (value: 'zh' | 'en') => {
+    locale.value = value;
+  };
+
   return {
     themeColor,
     changeThemeColor,
     collapsed,
     toggleCollapsed,
+    locale,
+    changeLocale,
     message,
     notification,
     modal,
