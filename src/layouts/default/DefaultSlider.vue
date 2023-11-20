@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import { Menu } from 'ant-design-vue';
 import { reactive, ref, VueElement, h } from 'vue';
-import { MailOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons-vue';
+import { SettingOutlined } from '@ant-design/icons-vue';
 import type { MenuProps, ItemType } from 'ant-design-vue';
 import useAppStore from '/@/store/modules/app';
 
@@ -23,13 +23,13 @@ const selectedKeys = ref<string[]>();
 
 const appStore = useAppStore();
 
-function getItem(
+const getItem = (
   label: VueElement | string,
   key: string,
   icon?: any,
   children?: ItemType[],
   type?: 'group',
-): ItemType {
+): ItemType =>  {
   return {
     key,
     icon,
@@ -40,27 +40,28 @@ function getItem(
 }
 
 const items: ItemType[] = reactive([
-  getItem('Navigation One', 'sub1', () => h(MailOutlined), [
-    getItem('Item 1', 'g1', null, [getItem('Option 1', '1'), getItem('Option 2', '2')], 'group'),
-    getItem('Item 2', 'g2', null, [getItem('Option 3', '3'), getItem('Option 4', '4')], 'group'),
-  ]),
-
-  getItem('Navigation Two', 'sub2', () => h(AppstoreOutlined), [
-    getItem('Option 5', '5'),
-    getItem('Option 6', '6'),
-    getItem('Submenu', 'sub3', null, [getItem('Option 7', '7'), getItem('Option 8', '8')]),
-  ]),
-
-  { type: 'divider' },
-
-  getItem('Navigation Three', 'sub4', () => h(SettingOutlined), [
+  getItem('dashboard', 'sub4', () => h(SettingOutlined), [
     getItem('Option 9', '9'),
     getItem('Option 10', '10'),
     getItem('Option 11', '11'),
     getItem('Option 12', '12'),
+    getItem('Option 9', '91'),
+    getItem('Option 10', '101'),
+    getItem('Option 11', '111'),
+    getItem('Option 12', '121'),
+    getItem('Option 9', '911'),
+    getItem('Option 10', '1011'),
+    getItem('Option 11', '1111'),
+    getItem('Option 12', '1211'),
+    getItem('Option 9', '9111'),
+    getItem('Option 10', '10111'),
+    getItem('Option 11', '11111'),
+    getItem('Option 12', '12111'),
+    getItem('Option 9', '91111'),
+    getItem('Option 10', '101111'),
+    getItem('Option 11', '111111'),
+    getItem('Option 12', '121111'),
   ]),
-
-  getItem('Group', 'grp', null, [getItem('Option 13', '13'), getItem('Option 14', '14')], 'group'),
 ]);
 
 const handleClick: MenuProps['onClick'] = e => {
@@ -74,7 +75,12 @@ const handleClick: MenuProps['onClick'] = e => {
   height: 100%;
   padding: 12px;
 }
-// :where(.css-dev-only-do-not-override-15ssfrr).ant-menu-light.ant-menu-root.ant-menu-inline {
-//   border: none;
-// }
+
+:where(.css-dev-only-do-not-override-15ssfrr).ant-menu-light.ant-menu-root.ant-menu-inline {
+  border: none;
+}
+
+:where(.css-dev-only-do-not-override-15ssfrr).ant-menu-light.ant-menu-root.ant-menu-vertical {
+  border: none;
+}
 </style>
