@@ -3,84 +3,117 @@
     v-model:openKeys="openKeys"
     v-model:selectedKeys="selectedKeys"
     mode="inline"
-    :items="items"
     :inlineCollapsed="appStore.collapsed"
     @click="handleClick"
     class="default-slider"
-  />
+  >
+    <SubMenu key="sub1">
+      <template #icon>
+        <SettingOutlined :class="appStore.collapsed ? '' : 'margin-left-48'" />
+      </template>
+      <template #title>数据统计</template>
+      <MenuItem key="5">
+        <span :class="appStore.collapsed ? '' : 'margin-left-48'">Option 5</span>
+      </MenuItem>
+      <MenuItem key="6">
+        <span :class="appStore.collapsed ? '' : 'margin-left-48'">Option 6</span>
+      </MenuItem>
+      <MenuItem key="7">
+        <span :class="appStore.collapsed ? '' : 'margin-left-48'">Option 7</span>
+      </MenuItem>
+      <MenuItem key="8">
+        <span :class="appStore.collapsed ? '' : 'margin-left-48'">Option 8</span>
+      </MenuItem>
+    </SubMenu>
+    <MenuItem key="9">
+      <template #icon>
+        <SettingOutlined :class="appStore.collapsed ? '' : 'margin-left-48'" />
+      </template>
+      <span>Option 9</span>
+    </MenuItem>
+  </Menu>
 </template>
 
 <script setup lang="ts">
-import { Menu } from 'ant-design-vue';
-import { reactive, ref, VueElement, h } from 'vue';
-import { SettingOutlined } from '@ant-design/icons-vue';
-import type { MenuProps, ItemType } from 'ant-design-vue';
-import useAppStore from '/@/store/modules/app';
+  import { Menu, MenuItem, SubMenu } from 'ant-design-vue';
+  import { ref } from 'vue';
+  import { SettingOutlined } from '@ant-design/icons-vue';
+  import type { MenuProps } from 'ant-design-vue';
+  import useAppStore from '/@/store/modules/app';
 
-const openKeys = ref<string[]>([]);
+  const openKeys = ref<string[]>([]);
 
-const selectedKeys = ref<string[]>();
+  const selectedKeys = ref<string[]>();
 
-const appStore = useAppStore();
+  const appStore = useAppStore();
 
-const getItem = (
-  label: VueElement | string,
-  key: string,
-  icon?: any,
-  children?: ItemType[],
-  type?: 'group',
-): ItemType =>  {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type,
-  } as ItemType;
-}
-
-const items: ItemType[] = reactive([
-  getItem('dashboard', 'sub4', () => h(SettingOutlined), [
-    getItem('Option 9', '9'),
-    getItem('Option 10', '10'),
-    getItem('Option 11', '11'),
-    getItem('Option 12', '12'),
-    getItem('Option 9', '91'),
-    getItem('Option 10', '101'),
-    getItem('Option 11', '111'),
-    getItem('Option 12', '121'),
-    getItem('Option 9', '911'),
-    getItem('Option 10', '1011'),
-    getItem('Option 11', '1111'),
-    getItem('Option 12', '1211'),
-    getItem('Option 9', '9111'),
-    getItem('Option 10', '10111'),
-    getItem('Option 11', '11111'),
-    getItem('Option 12', '12111'),
-    getItem('Option 9', '91111'),
-    getItem('Option 10', '101111'),
-    getItem('Option 11', '111111'),
-    getItem('Option 12', '121111'),
-  ]),
-]);
-
-const handleClick: MenuProps['onClick'] = e => {
-  console.log('click', e);
-};
+  const handleClick: MenuProps['onClick'] = e => {
+    console.log('click', e);
+  };
 </script>
 
 <style lang="less">
-.default-slider {
-  // width: 100%;
-  height: 100%;
-  padding: 12px;
-}
+  .default-slider {
+    // width: 100%;
+    height: 100%;
+    padding: 12px;
+  }
 
-:where(.css-dev-only-do-not-override-15ssfrr).ant-menu-light.ant-menu-root.ant-menu-inline {
-  border: none;
-}
+  .ant-menu-light.ant-menu-root.ant-menu-inline {
+    border: none;
+  }
 
-:where(.css-dev-only-do-not-override-15ssfrr).ant-menu-light.ant-menu-root.ant-menu-vertical {
-  border: none;
-}
+  .ant-menu-light.ant-menu-root.ant-menu-vertical {
+    border: none;
+  }
+
+  .ant-menu-inline >.ant-menu-submenu>.ant-menu-submenu-title {
+    height: 50px;
+    line-height: 50px;
+  }
+
+  .ant-menu-inline .ant-menu-item {
+    height: 50px;
+    line-height: 50px;
+  }
+
+  .ant-menu-light.ant-menu-inline .ant-menu-sub.ant-menu-inline {
+    background-color: transparent;
+  }
+
+  .ant-menu-inline .ant-menu-item::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 4px;
+    height: 34px;
+    transform: scaleY(.0001);
+    transition: transform .15s cubic-bezier(.215,.61,.355,1),opacity .15s cubic-bezier(.215,.61,.355,1);
+    border-radius: 8px;
+    opacity: 0;
+    background-color: #2f54eb;
+  }
+
+  .ant-menu-inline .ant-menu-item-selected::before {
+    transform: scaleY(1);
+    transition: transform .15s cubic-bezier(.645,.045,.355,1),opacity .15s cubic-bezier(.645,.045,.355,1);
+    opacity: 1;
+  }
+
+  .ant-menu-inline .ant-menu-submenu-arrow::before {
+    transform: rotate(135deg) translateX(2.5px);
+  }
+
+  .ant-menu .ant-menu-submenu-open.ant-menu-submenu-inline>.ant-menu-submenu-title>.ant-menu-submenu-arrow::before {
+    transform: rotate(-45deg) translateX(2.5px);
+  }
+
+  .ant-menu .ant-menu-submenu-open.ant-menu-submenu-inline>.ant-menu-submenu-title>.ant-menu-submenu-arrow::after {
+    transform: rotate(45deg) translateX(-2.5px);
+  }
+
+  .ant-menu .ant-menu-submenu-open.ant-menu-submenu-inline>.ant-menu-submenu-title>.ant-menu-submenu-arrow {
+    transform: none;
+  }
 </style>
