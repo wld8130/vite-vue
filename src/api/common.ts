@@ -8,3 +8,13 @@ export function getCodeImgApi() {
     noToken: true,
   });
 }
+
+// 登录
+export function loginApi(data: any) {
+  return server.request({
+    url: '/login',
+    method: 'post',
+    noToken: true,
+    data,
+  });
+}

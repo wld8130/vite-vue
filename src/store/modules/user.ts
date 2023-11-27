@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import type { UserInfoType } from '/@/types/user';
+import { loginApi } from '/@/api/common';
 
 const useUserStore = defineStore('user', () => {
   // 用户信息
-  const userInfo = ref<any>({});
+  const userInfo = ref<UserInfoType>();
   // 角色
   const roles = ref<string[]>([]);
   // 权限
@@ -27,6 +29,15 @@ const useUserStore = defineStore('user', () => {
     avatar.value = imgUrl;
   };
 
+  const getUserInfoApi = async (value: any) => {
+    const { code, data } = await loginApi(value);
+    if (code !== 200) {
+      console.log(code);
+    } else {
+      console.log(data);
+    }
+  };
+
   return {
     userInfo,
     handeleSetUserInfo,
@@ -36,6 +47,7 @@ const useUserStore = defineStore('user', () => {
     handleSetPermissions,
     avatar,
     handleSetAvatar,
+    getUserInfoApi,
   };
 });
 
