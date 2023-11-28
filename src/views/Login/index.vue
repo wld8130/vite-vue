@@ -27,10 +27,14 @@
 
   const { loading, isFail, imgUrl, uuidCode, getFetchData: getCodeImgData } = useCodeImage(getCodeImgApi);
 
-  const { loading: submitLoading } = useLogin();
+  const { loading: submitLoading, userLoginApi } = useLogin();
 
   const handleSubmit = (values: any) => {
     console.log('formData:', values, uuidCode);
+    userLoginApi({
+      ...values,
+      uuidCode: uuidCode.value
+    })
   };
 </script>
 

@@ -1,14 +1,31 @@
 import { ref } from 'vue';
-import useUserStore from '/@/store/modules/user';
+import { loginApi } from '/@/api/common';
+import Storage from '/@/utils/Storage';
+import { STORAGE_TOKEN } from '/@/utils/consts';
 
 export const useLogin = () => {
-  const userStore = useUserStore();
-
   const loading = ref<boolean>(false);
 
-  console.log(userStore);
+  const userLoginApi = async (value: any, resolve?: any, reject?: any) => {
+    loading.value = true;
+    const { code, data, token } = await loginApi(value);
+    if (code !== 200) {
+      loading.value = false;
+      if (reject) {
+        reject({ code, data });
+      }
+    } else {
+      Storage.setCookie(STORAGE_TOKEN, token);
+      loading.value = false;
+      // 保存 token
+      if (resolve) {
+        resolve({ code, data });
+      }
+    }
+  };
 
   return {
     loading,
+    userLoginApi,
   };
 };

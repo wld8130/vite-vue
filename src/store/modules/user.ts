@@ -29,12 +29,18 @@ const useUserStore = defineStore('user', () => {
     avatar.value = imgUrl;
   };
 
-  const getUserInfoApi = async (value: any) => {
+  const getUserInfoApi = async (value: any, resolve?: any, reject?: any) => {
     const { code, data } = await loginApi(value);
     if (code !== 200) {
       console.log(code);
+      if (reject) {
+        reject();
+      }
     } else {
       console.log(data);
+      if (resolve) {
+        resolve();
+      }
     }
   };
 

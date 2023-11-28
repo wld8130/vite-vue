@@ -1,20 +1,27 @@
 import server from '/@/utils/request';
+import type { AxiosResponse } from 'axios';
+
+interface ResponseBasicType {
+  code: number;
+  data: any;
+  token?: string;
+}
 
 // 获取验证码
-export function getCodeImgApi() {
+export const getCodeImgApi = () => {
   return server.request({
     url: '/captchaImage',
     method: 'get',
     noToken: true,
   });
-}
+};
 
 // 登录
-export function loginApi(data: any) {
+export const loginApi = (data: any): Promise<AxiosResponse<ResponseBasicType, ResponseBasicType>> => {
   return server.request({
     url: '/login',
     method: 'post',
     noToken: true,
     data,
   });
-}
+};
