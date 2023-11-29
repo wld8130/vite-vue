@@ -100,3 +100,32 @@ export const typeofObject = (value: any) => {
 export const typeofNull = (value: any) => {
   return Object.prototype.toString.call(value).match(/^\[object (.+)\]$/)[1].toLowerCase() === 'NULL';
 };
+
+/**
+ * 判断数据是否为null,undefined,空字符串，空数组,空对象
+ * @param value 数据
+ * @returns booleam
+ */
+export const isEmpty = (value: any) => {
+  if (typeofNull(value)) {
+    return true;
+  } else if (typeofUndefined(value)) {
+    return true;
+  } else if (value === '') {
+    return true;
+  } else if (typeofObject(value) && Object.keys(value).length === 0) {
+    return true;
+  } else if (typeofArray(value) && value.length === 0) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * 判断数据不为null,undefined,空字符串，空数组,空对象
+ * @param value 数据
+ * @returns booleam
+ */
+export const isNotEmpty = (value: any) => {
+  return !isEmpty(value);
+}

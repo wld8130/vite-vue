@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import type { UserInfoType } from '/@/types/user';
-import { loginApi } from '/@/api/common';
 
 const useUserStore = defineStore('user', () => {
   // 用户信息
@@ -13,47 +12,31 @@ const useUserStore = defineStore('user', () => {
   // 头像
   const avatar = ref<string>('');
 
-  const handeleSetUserInfo = (info: any) => {
+  const setUserInfo = (info: any) => {
     userInfo.value = info;
   };
 
-  const handleSetRoles = (roleList: string[]) => {
+  const setRoles = (roleList: string[]) => {
     roles.value = roleList;
   };
 
-  const handleSetPermissions = (permissionList: string[]) => {
+  const setPermissions = (permissionList: string[]) => {
     permissions.value = permissionList;
   };
 
-  const handleSetAvatar = (imgUrl: string) => {
+  const setAvatar = (imgUrl: string) => {
     avatar.value = imgUrl;
-  };
-
-  const getUserInfoApi = async (value: any, resolve?: any, reject?: any) => {
-    const { code, data } = await loginApi(value);
-    if (code !== 200) {
-      console.log(code);
-      if (reject) {
-        reject();
-      }
-    } else {
-      console.log(data);
-      if (resolve) {
-        resolve();
-      }
-    }
   };
 
   return {
     userInfo,
-    handeleSetUserInfo,
+    setUserInfo,
     roles,
-    handleSetRoles,
+    setRoles,
     permissions,
-    handleSetPermissions,
+    setPermissions,
     avatar,
-    handleSetAvatar,
-    getUserInfoApi,
+    setAvatar,
   };
 });
 
