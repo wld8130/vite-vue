@@ -4,7 +4,7 @@ import type { UserInfoType } from '/@/types/user';
 
 const useUserStore = defineStore('user', () => {
   // 用户信息
-  const userInfo = ref<UserInfoType>();
+  const userInfo = ref<UserInfoType | any>();
   // 角色
   const roles = ref<string[]>([]);
   // 权限
@@ -28,6 +28,14 @@ const useUserStore = defineStore('user', () => {
     avatar.value = imgUrl;
   };
 
+  // 重置用户信息
+  const resetUserInfo = () => {
+    userInfo.value = {};
+    roles.value = [];
+    permissions.value = [];
+    avatar.value = '';
+  };
+
   return {
     userInfo,
     setUserInfo,
@@ -37,6 +45,7 @@ const useUserStore = defineStore('user', () => {
     setPermissions,
     avatar,
     setAvatar,
+    resetUserInfo,
   };
 });
 

@@ -1,3 +1,3 @@
 <template>
-  <div>404</div>
+  <div>当前路径为无效路径</div>
 </template>

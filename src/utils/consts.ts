@@ -9,3 +9,6 @@ export const MODE_DEVELOPMENT = 'development';
 
 // production(生产环境)
 export const MODE_PRODUCTION = 'production';
+
+// 路由
+export const WHITE_ROUTER_LIST = ['/login'];

@@ -1,10 +1,17 @@
 import server from '/@/utils/request';
 
 // 获取用户信息
-export const userInfoApi = (data: any) => {
+export const userInfoApi = () => {
   return server.request({
     url: '/getInfo',
     method: 'get',
-    data,
+  });
+};
+
+// 获取路由信息
+export const routersApi = () => {
+  return server.request({
+    url: '/getRouters',
+    method: 'get',
   });
 };
