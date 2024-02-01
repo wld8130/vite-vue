@@ -16,5 +16,6 @@ declare module 'vue' {
     CodeEditor: typeof import('./src/components/CodeEditor/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SvgIcon: typeof import('./src/components/SvgIcon/svg-icon.vue')['default']
   }
 }

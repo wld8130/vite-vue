@@ -7,49 +7,84 @@
     @click="handleClick"
     class="default-slider"
   >
-    <SubMenu key="sub1">
-      <template #icon>
-        <SettingOutlined :class="appStore.collapsed ? '' : 'margin-left-48'" />
+    <template v-for="menu in menus" :key="menu.name">
+      <template v-if="!menu.meta?.hidden">
+        <SubMenu v-if="menu.children && menu.children.length > 0" :key="menu.name">
+          <template #icon v-if="menu.meta?.icon">
+            <SvgIcon :iconClass="(menu.meta?.icon as string)" :class="appStore.collapsed ? '' : 'margin-left-48'" />
+          </template>
+          <template #title>
+            <span :class="menu.meta?.icon ? '' : 'margin-left-48'">{{ menu.meta?.title }}</span>
+          </template>
+          <template v-for="item in menu.children" :key="item.name">
+            <template v-if="!item.meta?.hidden">
+              <MenuItem :key="item.name">
+                <span :class="appStore.collapsed ? '' : 'margin-left-48'">{{ item.meta?.title }}</span>
+              </MenuItem>
+            </template>
+          </template>
+        </SubMenu>
+        <template v-else>
+          <MenuItem :key="menu.name">
+            <template #icon v-if="menu.meta?.icon">
+              <SvgIcon :iconClass="(menu.meta?.icon as string)" :class="appStore.collapsed ? '' : 'margin-left-48'" />
+            </template>
+            <span :class="menu.meta?.icon ? '' : 'margin-left-48'">{{ menu.meta?.title }}</span>
+          </MenuItem>
+        </template>
       </template>
-      <template #title>数据统计</template>
-      <MenuItem key="5">
-        <span :class="appStore.collapsed ? '' : 'margin-left-48'">Option 5</span>
-      </MenuItem>
-      <MenuItem key="6">
-        <span :class="appStore.collapsed ? '' : 'margin-left-48'">Option 6</span>
-      </MenuItem>
-      <MenuItem key="7">
-        <span :class="appStore.collapsed ? '' : 'margin-left-48'">Option 7</span>
-      </MenuItem>
-      <MenuItem key="8">
-        <span :class="appStore.collapsed ? '' : 'margin-left-48'">Option 8</span>
-      </MenuItem>
-    </SubMenu>
-    <MenuItem key="9">
-      <template #icon>
-        <SettingOutlined :class="appStore.collapsed ? '' : 'margin-left-48'" />
-      </template>
-      <span>Option 9</span>
-    </MenuItem>
+    </template>
   </Menu>
 </template>
 
 <script setup lang="ts">
   import { Menu, MenuItem, SubMenu } from 'ant-design-vue';
-  import { ref } from 'vue';
-  import { SettingOutlined } from '@ant-design/icons-vue';
+  import { ref, computed, watch } from 'vue';
   import type { MenuProps } from 'ant-design-vue';
   import useAppStore from '/@/store/modules/app';
-
-  const openKeys = ref<string[]>([]);
-
-  const selectedKeys = ref<string[]>();
+  import { routes } from '/@/router';
+  import { MENU_ROUTER_NAME } from '/@/utils/consts';
+  import { useRoute, useRouter } from 'vue-router';
+  import SvgIcon from '/@/components/SvgIcon/svg-icon.vue';
 
   const appStore = useAppStore();
 
-  const handleClick: MenuProps['onClick'] = e => {
-    console.log('click', e);
+  const route = useRoute();
+
+  const router = useRouter();
+
+  // 获取当前打开的子菜单
+  const getOpenKeys = (): string[] => [route.matched[1]?.name] as string[];
+
+  const getSelectedKeys = () => {
+    const routrName = route.name as string;
+    return [routrName.replace('/details', '')]
+  }
+
+  const openKeys = ref<string[]>(getOpenKeys());
+
+  const selectedKeys = ref<string[]>(getSelectedKeys());
+
+  const menus = computed(() => routes.find((item) => item.name === MENU_ROUTER_NAME)?.children || []);
+
+  const handleClick: MenuProps['onClick'] = ({ key }) => {
+    router.push({ name: key as string });
   };
+
+  // 监听菜单收缩
+  watch(
+    () => appStore.collapsed,
+    (newVal) => {
+      openKeys.value = newVal ? [] : getOpenKeys();
+      selectedKeys.value = getSelectedKeys();
+    },
+  );
+
+  // 监听路由变化
+  watch(route, () => {
+    openKeys.value = getOpenKeys();
+    selectedKeys.value = getSelectedKeys();
+  });
 </script>
 
 <style lang="less">

@@ -12,3 +12,6 @@ export const MODE_PRODUCTION = 'production';
 
 // 路由
 export const WHITE_ROUTER_LIST = ['/login'];
+
+// 菜单项的父级
+export const MENU_ROUTER_NAME = 'Layout';

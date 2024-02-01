@@ -3,9 +3,10 @@ import vue from '@vitejs/plugin-vue';
 import Components from 'unplugin-vue-components/vite';
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
 import { resolve } from 'path';
+import { svgBuilder } from './src/plugins/svgBuilder';
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode }): any => {
   const root = process.cwd();
 
   const pathResolve = (pathname: string) => resolve(root, '.', pathname);
@@ -22,7 +23,7 @@ export default defineConfig(({ mode }) => {
         '/api': {
           target: env.VITE_APP_BASE_API,
           changeOrigin: true,
-          rewrite: path => path.replace(/^\/api/, ''),
+          rewrite: (path) => path.replace(/^\/api/, ''),
         },
         // 正则表达式写法：http://localhost:5173/fallback/ -> http://jsonplaceholder.typicode.com/
         // '^/fallback/.*': {
@@ -63,6 +64,7 @@ export default defineConfig(({ mode }) => {
     // },
     plugins: [
       vue(),
+      svgBuilder('./src/assets/icon/'), // 这里已经将src/icons/svg/下的svg全部导入，无需再单独导入
       Components({
         resolvers: [
           AntDesignVueResolver({

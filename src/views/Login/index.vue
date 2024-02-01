@@ -33,7 +33,7 @@
     console.log('formData:', values, uuidCode);
     userLoginApi({
       ...values,
-      uuidCode: uuidCode.value
+      uuid: uuidCode.value
     })
   };
 </script>
