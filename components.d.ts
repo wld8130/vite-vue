@@ -14,6 +14,7 @@ declare module 'vue' {
     AliveRouteView: typeof import('./src/components/RouteContainer/AliveRouteView.vue')['default']
     BasicRouteView: typeof import('./src/components/RouteContainer/BasicRouteView.vue')['default']
     CodeEditor: typeof import('./src/components/CodeEditor/index.vue')['default']
+    FabricEditor: typeof import('./src/components/FabricEditor/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SvgIcon: typeof import('./src/components/SvgIcon/svg-icon.vue')['default']
