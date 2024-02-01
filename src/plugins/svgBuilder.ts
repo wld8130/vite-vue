@@ -11,7 +11,7 @@ const clearReturn = /(\r)|(\n)/g;
 
 const clearFill = /fill="#\d+"/g;
 
-function findSvgFile(dir): string[] {
+function findSvgFile(dir: string): string[] {
   const svgRes: Array<string> = [];
   const dirents = readdirSync(dir, {
     withFileTypes: true,
@@ -24,10 +24,10 @@ function findSvgFile(dir): string[] {
         .toString()
         .replace(clearReturn, '')
         .replace(clearFill, '')
-        .replace(svgTitle, ($1, $2) => {
+        .replace(svgTitle, (_, $2) => {
           let width = 0;
           let height = 0;
-          let content = $2.replace(clearHeightWidth, (s1, s2, s3) => {
+          let content = $2.replace(clearHeightWidth, (_s1: any, s2: string, s3: any) => {
             if (s2 === 'width') {
               width = s3;
             } else if (s2 === 'height') {
