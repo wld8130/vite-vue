@@ -17,7 +17,7 @@ export const getCodeImgApi = () => {
 };
 
 // 登录
-export const loginApi = (data: any): Promise<AxiosResponse<ResponseBasicType, ResponseBasicType>> => {
+export const loginApi = (data: any): Promise<AxiosResponse<any, ResponseBasicType>> => {
   return server.request({
     url: '/login',
     method: 'post',

@@ -5,19 +5,19 @@
 </template>
 
 <script setup lang="ts" name="FabricEditor">
-  import { FabricImage, StaticCanvas } from 'fabric';
+  import { FabricImage, Canvas } from 'fabric';
   import { ref, onMounted } from 'vue';
   import IMG_EXAMPLE from '/@/assets/img/example.png';
 
   const canvasRef = ref<HTMLCanvasElement | null>(null);
-  const canvasInstance = ref<any>();
+  const canvasInstance = ref<Canvas>();
 
   const init = async () => {
-    canvasInstance.value = new StaticCanvas(canvasRef.value as unknown as HTMLCanvasElement);
+    canvasInstance.value = new Canvas(canvasRef.value as unknown as HTMLCanvasElement);
     const oImg = await FabricImage.fromURL(IMG_EXAMPLE);
     if (oImg) {
       console.log(oImg)
-      canvasInstance.value.add(oImg);
+      canvasInstance.value.backgroundImage = oImg;
     }
   };
 
