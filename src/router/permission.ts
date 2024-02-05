@@ -5,8 +5,10 @@ import { STORAGE_TOKEN } from '/@/utils/consts';
 import { useUserInfo } from '/@/hooks/useUserInfo';
 import { useRouterList } from '/@/hooks/useRouterList';
 import { isEmpty } from '/@/utils/common';
+import { WHITE_ROUTER_LIST } from '/@/utils/consts';
 
-const whiteList = ['/login', '/thirdLogin', '/unitelogin'];
+// 路由白名单
+const whiteList = WHITE_ROUTER_LIST;
 
 export const routerWithPermissions = (router: Router) => {
   // 路由导航守卫
@@ -37,6 +39,11 @@ export const routerWithPermissions = (router: Router) => {
               // 清除token，清除用户信息
               return { path: '/login' };
             } else {
+              const { routerList = [] } = routerResult;
+              // 需要对路由进行处理
+              routerList.forEach((route) => {
+                router.addRoute(route);
+              });
               console.log(routerResult);
               // 手动添加路由
               return true;

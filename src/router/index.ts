@@ -2,7 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import LayOuts from '/@/layouts/index.vue';
 import { routerWithPermissions } from './permission';
 import { commonRouters } from './common';
-import { constRoutes } from './const';
+import { constRoutes, publicRoutes } from './const';
 import { MENU_ROUTER_NAME } from '/@/utils/consts';
 
 export const routes: Array<RouteRecordRaw> = [
@@ -14,7 +14,7 @@ export const routes: Array<RouteRecordRaw> = [
       title: '首页',
     },
     component: LayOuts,
-    children: constRoutes,
+    children: [...constRoutes, ...publicRoutes],
   },
   ...commonRouters,
 ];

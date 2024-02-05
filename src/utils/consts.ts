@@ -10,8 +10,8 @@ export const MODE_DEVELOPMENT = 'development';
 // production(生产环境)
 export const MODE_PRODUCTION = 'production';
 
-// 路由
-export const WHITE_ROUTER_LIST = ['/login'];
-
 // 菜单项的父级
 export const MENU_ROUTER_NAME = 'Layout';
+
+// 路由 - 白名单
+export const WHITE_ROUTER_LIST = ['/login'];
