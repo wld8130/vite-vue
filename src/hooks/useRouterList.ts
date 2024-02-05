@@ -6,6 +6,7 @@ import Storage from '/@/utils/Storage';
 import { STORAGE_TOKEN } from '/@/utils/consts';
 // import { routes } from '/@/router';
 import { routerPermissions } from '/@/utils/routeConfig';
+import AliveRouteView from '/@/components/RouteContainer/AliveRouteView.vue';
 
 export const useRouterList = () => {
   const userStore = useUserStore();
@@ -45,7 +46,7 @@ export const useRouterList = () => {
     return flag === menuInfos.length;
   };
 
-  const createMenuRouters = (routesOfMenus: any[]): RouteRecordRaw[] => {
+  const createMenuRouters = (routesOfMenus: any[], parRoute: any): RouteRecordRaw[] => {
     const routerList: any = [];
     routesOfMenus.forEach((k: any) => {
       const routeName = parRoute && parRoute.name ? `${parRoute?.name}/${k.name}` : k.name;
@@ -54,9 +55,9 @@ export const useRouterList = () => {
           routerList.push({
             ...k,
             name: routeName,
-            component: BasicRouter,
+            component: AliveRouteView,
             redirect: createRedirect(k.path, k.children || []),
-            children: createChildPowerRoutes(k.children || [], {
+            children: createMenuRouters(k.children || [], {
               ...k,
               name: routeName,
             }),
