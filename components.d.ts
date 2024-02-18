@@ -12,7 +12,6 @@ declare module 'vue' {
     AInput: typeof import('ant-design-vue/es')['Input']
     AInputPassword: typeof import('ant-design-vue/es')['InputPassword']
     AliveRouteView: typeof import('./src/components/RouteContainer/AliveRouteView.vue')['default']
-    BasicRouter: typeof import('./src/components/BasicRouter/index.vue')['default']
     BasicRouteView: typeof import('./src/components/RouteContainer/BasicRouteView.vue')['default']
     CodeEditor: typeof import('./src/components/CodeEditor/index.vue')['default']
     FabricEditor: typeof import('./src/components/FabricEditor/index.vue')['default']

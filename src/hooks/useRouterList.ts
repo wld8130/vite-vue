@@ -6,6 +6,7 @@ import Storage from '/@/utils/Storage';
 import { STORAGE_TOKEN } from '/@/utils/consts';
 import { routerPermissions, mateRouteComponent } from '/@/utils/routeUtils';
 import AliveRouteView from '/@/components/RouteContainer/AliveRouteView.vue';
+import { markRaw } from 'vue';
 
 export const useRouterList = () => {
   const userStore = useUserStore();
@@ -59,7 +60,7 @@ export const useRouterList = () => {
               hidden: k.hidden,
             },
             name: routeName,
-            component: AliveRouteView,
+            component: markRaw(AliveRouteView),
             redirect: createRedirect(k.path, k.children || []),
             children: createMenuRouters(k.children || [], {
               ...k,

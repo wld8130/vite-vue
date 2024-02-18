@@ -4,6 +4,7 @@ import { routerWithPermissions } from './permission';
 import { commonRouters } from './common';
 import { constRoutes, publicRoutes } from './const';
 import { MENU_ROUTER_NAME } from '/@/utils/consts';
+import { markRaw } from 'vue';
 
 export const routes: Array<RouteRecordRaw> = [
   {
@@ -13,7 +14,7 @@ export const routes: Array<RouteRecordRaw> = [
     meta: {
       title: '首页',
     },
-    component: LayOuts,
+    component: markRaw(LayOuts),
     children: [...constRoutes, ...publicRoutes],
   },
   ...commonRouters,

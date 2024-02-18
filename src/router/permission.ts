@@ -55,7 +55,7 @@ export const routerWithPermissions = (router: Router) => {
               // 判断权限路由是否包含当前路由
               const item = router.getRoutes().find((k: RouteRecordRaw) => k.path === to.fullPath.split('?')[0]);
               if (item) {
-                return true;
+                return { path: to.fullPath };
               } else {
                 return { path: '/' };
               }
