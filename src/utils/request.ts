@@ -2,6 +2,9 @@ import axios, { InternalAxiosRequestConfig, Canceler, AxiosResponse } from 'axio
 import { messageWithKey } from '../hooks/useMessageKey';
 import Storage from '/@/utils/Storage';
 import { STORAGE_TOKEN, MODE_DEVELOPMENT } from '/@/utils/consts';
+import { Modal } from 'ant-design-vue';
+import useUserStore from '/@/store/modules/user';
+import router from '/@/router';
 
 declare module 'axios' {
   export interface InternalAxiosRequestConfig {
@@ -38,7 +41,7 @@ const removePending = (config: InternalAxiosRequestConfig, cancel: Canceler | nu
   if (pending.includes(flgUrl)) {
     if (cancel) {
       // 取消请求（message 参数是可选的）
-      cancel('请勿频繁操作');
+      cancel();
     } else {
       pending.splice(pending.indexOf(flgUrl), 1); // 删除记录
     }
@@ -92,6 +95,7 @@ server.interceptors.request.use(
 
 // 添加响应拦截器
 server.interceptors.response.use((res: AxiosResponse<any>) => {
+  const userStore = useUserStore();
   // 对响应数据做点什么
   // 对请求成功的请求删除记录
   removePending(res.config, null);
@@ -99,11 +103,31 @@ server.interceptors.response.use((res: AxiosResponse<any>) => {
   const { code = 200, msg } = res.data;
 
   // 对不同的code进行处理
+  // token失效或无权限
+  if (code === 401) {
+    Modal.destroyAll();
+    Modal.confirm({
+      content: '登录状态已过期，您可以继续留在该页面，或者重新登录',
+      onOk: () => {
+        userStore.clearUserInfo(() => {
+          // 清除token
+          // 跳转路由
+          Storage.removeCookie(STORAGE_TOKEN);
+          router.replace({ path: '/login' });
+        });
+      },
+      onCancel: () => {
+        Modal.destroyAll();
+      },
+    });
+    return Promise.reject();
+  }
 
   console.log(code, msg);
 
   return res.data;
 }, function (error) {
+  const userStore = useUserStore();
   // 对响应错误做点什么
   const { config, message: errorMsg } = error;
   // 对请求成功的请求删除记录
@@ -114,17 +138,22 @@ server.interceptors.response.use((res: AxiosResponse<any>) => {
   } else if (errorMsg.includes('timeout')) {
     alertMsg = '系统接口请求超时';
   } else if (errorMsg.includes('Request failed with status code 424')) {
-    // Modal.destroyAll();
-    // Modal.confirm({
-    //   content: '登录状态已过期，您可以继续留在该页面，或者重新登录',
-    //   onOk: () => {
-    //     store.dispatch('user/logout');
-    //   },
-    //   onCancel: () => {
-    //     Modal.destroyAll();
-    //   },
-    // });
-    // return Promise.reject();
+    Modal.destroyAll();
+    Modal.confirm({
+      content: '登录状态已过期，您可以继续留在该页面，或者重新登录',
+      onOk: () => {
+        userStore.clearUserInfo(() => {
+          // 清除token
+          // 跳转路由
+          Storage.removeCookie(STORAGE_TOKEN);
+          router.replace({ path: '/login' });
+        });
+      },
+      onCancel: () => {
+        Modal.destroyAll();
+      },
+    });
+    return Promise.reject();
   } else if (errorMsg.includes('Request failed with status code')) {
     alertMsg = '系统接口' + errorMsg.substr(errorMsg.length - 3) + '异常';
   }

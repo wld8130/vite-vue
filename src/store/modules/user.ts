@@ -36,6 +36,13 @@ const useUserStore = defineStore('user', () => {
     avatar.value = '';
   };
 
+  const clearUserInfo = (callBack?: () => void) => {
+    resetUserInfo();
+    if (callBack) {
+      callBack();
+    }
+  };
+
   return {
     userInfo,
     setUserInfo,
@@ -46,6 +53,7 @@ const useUserStore = defineStore('user', () => {
     avatar,
     setAvatar,
     resetUserInfo,
+    clearUserInfo,
   };
 });
 
