@@ -4,17 +4,16 @@ import { messageWithKey } from '/@/hooks/useMessageKey';
 import useUserStore from '/@/store/modules/user';
 import Storage from '/@/utils/Storage';
 import { STORAGE_TOKEN } from '/@/utils/consts';
-// import { routes } from '/@/router';
-import { routerPermissions } from '/@/utils/routeConfig';
+import { routerPermissions, mateRouteComponent } from '/@/utils/routeUtils';
 import AliveRouteView from '/@/components/RouteContainer/AliveRouteView.vue';
 
 export const useRouterList = () => {
   const userStore = useUserStore();
 
-  const getRouterList = () => {
+  const getRouterList = (): Promise<any> => {
     return new Promise((resolve, reject) => {
       routersApi()
-        .then(({ code, data, msg }) => {
+        .then(({ code, data, msg }: any) => {
           if (code !== 200) {
             messageWithKey.error(msg);
             Storage.removeCookie(STORAGE_TOKEN);
@@ -36,6 +35,7 @@ export const useRouterList = () => {
     return `${path}/${childPath}`;
   };
 
+  // 判断是否需要隐藏父级菜单
   const isEffective = (menuInfos: any[]) => {
     let flag = 0;
     menuInfos.forEach((k) => {
@@ -46,7 +46,7 @@ export const useRouterList = () => {
     return flag === menuInfos.length;
   };
 
-  const createMenuRouters = (routesOfMenus: any[], parRoute: any): RouteRecordRaw[] => {
+  const createMenuRouters = (routesOfMenus: any[], parRoute?: any): RouteRecordRaw[] => {
     const routerList: any = [];
     routesOfMenus.forEach((k: any) => {
       const routeName = parRoute && parRoute.name ? `${parRoute?.name}/${k.name}` : k.name;
@@ -54,6 +54,10 @@ export const useRouterList = () => {
         if (!isEffective(k.children)) {
           routerList.push({
             ...k,
+            meta: {
+              ...k.meta,
+              hidden: k.hidden,
+            },
             name: routeName,
             component: AliveRouteView,
             redirect: createRedirect(k.path, k.children || []),
@@ -66,8 +70,11 @@ export const useRouterList = () => {
       } else {
         routerList.push({
           ...k,
-          // component: () => import(`../views/${k.component}`),
-          component: routerPermissions[k.component],
+          meta: {
+            ...k.meta,
+            hidden: k.hidden,
+          },
+          component: mateRouteComponent(k.component, routerPermissions),
         });
       }
     });

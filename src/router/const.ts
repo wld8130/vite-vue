@@ -1,17 +1,17 @@
 import { RouteRecordRaw } from 'vue-router';
-import Home from '/@/views/Home/index.vue';
+// import Home from '/@/views/Home/index.vue';
 import PersonCenter from '/@/views/PersonCenter/index.vue';
 
 export const constRoutes: RouteRecordRaw[] = [
-  {
-    path: 'home',
-    name: 'home',
-    component: Home,
-    meta: {
-      title: '首页',
-      icon: 'user',
-    },
-  },
+  // {
+  //   path: 'home',
+  //   name: 'home',
+  //   component: Home,
+  //   meta: {
+  //     title: '首页',
+  //     icon: 'user',
+  //   },
+  // },
 ];
 
 export const publicRoutes: RouteRecordRaw[] = [

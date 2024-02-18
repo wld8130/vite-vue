@@ -11,7 +11,7 @@ export const useUserInfo = () => {
   const getUserInfo = () => {
     return new Promise((resolve, reject) => {
       userInfoApi()
-        .then(({ code, msg, permissions, roles, user }) => {
+        .then(({ code, msg, permissions, roles, user }: any) => {
           if (code !== 200) {
             // 获取用户信息失败
             // 1.清空token

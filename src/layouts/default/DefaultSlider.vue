@@ -42,12 +42,14 @@
   import { ref, computed, watch } from 'vue';
   import type { MenuProps } from 'ant-design-vue';
   import useAppStore from '/@/store/modules/app';
-  import { routes } from '/@/router';
+  import useRouteStore from '/@/store/modules/route';
   import { MENU_ROUTER_NAME } from '/@/utils/consts';
   import { useRoute, useRouter } from 'vue-router';
   import SvgIcon from '/@/components/SvgIcon/svg-icon.vue';
 
   const appStore = useAppStore();
+
+  const routeStore = useRouteStore();
 
   const route = useRoute();
 
@@ -59,13 +61,14 @@
   const getSelectedKeys = () => {
     const routrName = route.name as string;
     return [routrName.replace('/details', '')]
-  }
+  };
 
   const openKeys = ref<string[]>(getOpenKeys());
 
   const selectedKeys = ref<string[]>(getSelectedKeys());
 
-  const menus = computed(() => routes.find((item) => item.name === MENU_ROUTER_NAME)?.children || []);
+  // 需要动态变化
+  const menus = computed(() => routeStore.routes.find((item) => item.name === MENU_ROUTER_NAME)?.children || []);
 
   const handleClick: MenuProps['onClick'] = ({ key }) => {
     router.push({ name: key as string });

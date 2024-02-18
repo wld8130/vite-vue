@@ -1,6 +1,7 @@
-import type { Router } from 'vue-router';
+import type { Router, RouteRecordRaw } from 'vue-router';
 import Storage from '/@/utils/Storage';
 import useUserStore from '/@/store/modules/user';
+import useRouteStore from '/@/store/modules/route';
 import { STORAGE_TOKEN } from '/@/utils/consts';
 import { useUserInfo } from '/@/hooks/useUserInfo';
 import { useRouterList } from '/@/hooks/useRouterList';
@@ -14,8 +15,9 @@ export const routerWithPermissions = (router: Router) => {
   // 路由导航守卫
   router.beforeEach(async (to) => {
     const userStore = useUserStore();
+    const routeStore = useRouteStore();
     const { getUserInfo } = useUserInfo();
-    const { getRouterList } = useRouterList();
+    const { getRouterList, createMenuRouters } = useRouterList();
 
     // 判断 token 是否存在
     if (Storage.getCookie(STORAGE_TOKEN)) {
@@ -30,59 +32,39 @@ export const routerWithPermissions = (router: Router) => {
           const userResult = await getUserInfo();
           if (isEmpty(userResult)) {
             // 获取用户信息失败,返回登录页（已清除token，清除用户信息）
+            // 当为空数组时是否认定为无权限角色
             return { path: '/login' };
           } else {
             // 获取路由信息
-            const routerResult = await getRouterList();
-            if (isEmpty(routerResult)) {
+            const { routerList = [] } = await getRouterList();
+            if (isEmpty(routerList)) {
               // 没有获取到路由表（1.请求无响应；2.请求异常）
               // 清除token，清除用户信息
+              userStore.resetUserInfo();
+              Storage.removeCookie(STORAGE_TOKEN);
               return { path: '/login' };
             } else {
-              const { routerList = [] } = routerResult;
               // 需要对路由进行处理
-              routerList.forEach((route) => {
+              const newList = createMenuRouters(routerList);
+              // 更新store的menus
+              const routeApiList = routeStore.updateRoutes(newList);
+              // 将添加的路由表注册进路由(需要将路由信息全部重新加载)
+              routeApiList.forEach((route: any) => {
                 router.addRoute(route);
               });
-              console.log(routerResult);
-              // 手动添加路由
-              return true;
+              // 判断权限路由是否包含当前路由
+              const item = router.getRoutes().find((k: RouteRecordRaw) => k.path === to.fullPath.split('?')[0]);
+              if (item) {
+                return true;
+              } else {
+                return { path: '/' };
+              }
             }
           }
         } else {
           // 存在用户信息，正常跳转
           return true;
         }
-        // return true;
-        // 判断是否有用户信息
-        // if (userStore.roles?.length === 0) {
-        //   // 获取用户个人信息
-        //   store.dispatch('user/getInfo').then(() => {
-        //     store
-        //       .dispatch('routes/generateRoutes')
-        //       .then((accessRoutes: RouteRecordRaw[]) => {
-        //         // 将添加的路由表注册进路由
-        //         accessRoutes.forEach((route) => {
-        //           router.addRoute(route);
-        //         });
-        //         // 判断权限路由是否包含当前路由
-        //         const item = router.getRoutes().find((k: RouteRecordRaw) => k.path === to.fullPath.split('?')[0]);
-        //         if (item) {
-        //           next(to.fullPath);
-        //         } else {
-        //           // 无对应路由跳转至 首页
-        //           next('/');
-        //         }
-        //       })
-        //       .catch(() => {
-        //         setTimeout(() => {
-        //           store.dispatch('user/logout');
-        //         }, 1000);
-        //       });
-        //   });
-        // } else {
-        //   next();
-        // }
       }
     } else {
       // 在免登录白名单，直接进入 配置 (whiteList)
