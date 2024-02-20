@@ -23,7 +23,7 @@
       <div class="editor-content-center">
         <div class="workspace">
           <div class="inside-shadow"></div>
-          <canvas ref="canvasRef" class="workspace-canvas"></canvas>
+          <canvas ref="canvasRef" width="1600" height="900" class="workspace-canvas"></canvas>
         </div>
       </div>
       <div class="editor-content-right">
@@ -36,13 +36,15 @@
 
 <script setup lang="ts" name="FabricEditor">
   import { Button, Divider, Menu } from 'ant-design-vue';
-  import { fabric } from 'fabric';
   import { ref, onMounted, h } from 'vue';
   import { PieChartOutlined } from '@ant-design/icons-vue';
+  import useFabricCanvas from './useFabricCanvas';
+  import useFabricRect from './useFabricRect';
   // import IMG_EXAMPLE from '/@/assets/img/example.png';
 
   const canvasRef = ref<HTMLCanvasElement | null>(null);
-  const canvasInstance = ref();
+  const { fabricCanvas, initFabricCanvas, addRect } = useFabricCanvas();
+  const { createBackgroundRect, createRect } = useFabricRect();
   const leftExtendFlag = ref<boolean>(false);
   const rightExtendFlag = ref<boolean>(false);
 
@@ -65,14 +67,24 @@
 
   const init = async () => {
     // 初始化fabric
-    canvasInstance.value = new fabric.Canvas(canvasRef.value as unknown as HTMLCanvasElement, {
-      fireRightClick: true, // 启用右键，button的数字为3
-      stopContextMenu: true, // 禁止默认右键菜单
-      controlsAboveOverlay: true, // 超出clipPath后仍然展示控制条
-      imageSmoothingEnabled: false, // 解决文字导出后不清晰问题
-    });
-
+    initFabricCanvas(canvasRef.value);
     // 初始化编辑器
+    const BgdRecet = createBackgroundRect({
+      fill: 'rgba(255,255,255,1)',
+      width: 100,
+      height: 100,
+      strokeWidth: 0,
+    });
+    addRect(fabricCanvas.value as any, BgdRecet);
+
+    const textBox = createRect({
+      left: 100,
+      top: 100,
+      fill: 'red',
+      width: 100,
+      height: 100,
+    });
+    addRect(fabricCanvas.value as any, textBox);
   };
 
   onMounted(() => {
@@ -116,8 +128,6 @@
         }
 
         .left-extend {
-          flex: 1;
-          flex: 1;
           flex: 1;
           width: 220px;
           height: 100%;

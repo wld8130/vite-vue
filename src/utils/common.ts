@@ -129,3 +129,21 @@ export const isEmpty = (value: any) => {
 export const isNotEmpty = (value: any) => {
   return !isEmpty(value);
 }
+
+/**
+ * 图片文件转Base64
+ * @param file 图片文件
+ * @returns promise
+ */
+export const convertImageFileToBase64 = (file: File): Promise => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = function () {
+      resolve(reader.result)
+    };
+    reader.onerror = () => {
+      reject();
+    }
+    reader.readAsDataURL(file);
+  })
+};
