@@ -4,6 +4,7 @@ import { markRaw } from 'vue';
 
 export const routerPermissions = {
   home: Home,
+  'DataStatistics/QuotaData': Home,
 };
 
 export const mateRouteComponent = (routeKey: string, componentObj: any) => {

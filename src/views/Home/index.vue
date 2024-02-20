@@ -1,5 +1,5 @@
 <template>
-  <div class="home-container">
+  <div class="home-container alpha-content-card">
     <FabricEditor />
   </div>
 </template>
@@ -12,8 +12,5 @@
   .home-container {
     width: 100%;
     height: 100%;
-    padding: 12px 12px 0;
-    border-radius: 8px;
-    background-color: #fff;
   }
 </style>
