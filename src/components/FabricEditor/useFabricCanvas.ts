@@ -54,12 +54,23 @@ const useFabricCanvas = () => {
     });
   };
 
+  /**
+   * 向canvas设置宽高
+   * @param canvasIns canvas
+   * @param options 宽高
+   */
+  const setCanvasDimensions = (canvasIns: fabric.Canvas, options: fabric.ICanvasDimensions) => {
+    // 设置宽高
+    canvasIns.setDimensions(options);
+  };
+
   return {
     fabricCanvas,
     initFabricCanvas,
     addRect,
     addImage,
     setBackgroundImage,
+    setCanvasDimensions,
   };
 };
 
