@@ -11,7 +11,7 @@
         <Divider type="vertical" />
         <Button type="link">清空</Button>
         <Divider type="vertical" />
-        <Button type="primary">保存</Button>
+        <Button type="primary" @click="handleSaveJSON">保存</Button>
       </div>
     </div>
     <div class="editor-content">
@@ -38,66 +38,82 @@
   import { Button, Divider, Menu } from 'ant-design-vue';
   import { ref, onMounted, h } from 'vue';
   import { PieChartOutlined } from '@ant-design/icons-vue';
+  import { v4 as uuid } from 'uuid';
   import useFabricCanvas from './useFabricCanvas';
   import useFabricRect from './useFabricRect';
   import useFabricImage from './useFabricImage';
   import IMG_EXAMPLE from '/@/assets/img/example.png';
+  import { fabric } from 'fabric';
 
-  const canvasRef = ref<HTMLCanvasElement | null>(null);
-  const workspaceRef = ref<HTMLDivElement | null>(null);
-  const { fabricCanvas, initFabricCanvas, addRect, setBackgroundImage } = useFabricCanvas();
-  const { createBackgroundRect, createRect } = useFabricRect();
-  const { createFabricImage } = useFabricImage();
-  const leftExtendFlag = ref<boolean>(false);
-  const rightExtendFlag = ref<boolean>(false);
+    const canvasRef = ref<HTMLCanvasElement | null>(null);
+    const workspaceRef = ref<HTMLDivElement | null>(null);
+    const { fabricCanvas, initFabricCanvas, addRect, addImageOfNoSelected, registerZoomMouseWheel, registerTransformMouseWheel, setSelectionStyle, canvasToJSON } = useFabricCanvas();
+    const { createBackgroundRect, createRect } = useFabricRect();
+    const { createFabricImage } = useFabricImage();
+    const leftExtendFlag = ref<boolean>(false);
+    const rightExtendFlag = ref<boolean>(false);
 
-  const items = [
-    {
-      key: '1',
-      icon: () => h(PieChartOutlined),
-      label: 'One',
-      title: 'One',
-    },
-  ];
+    const items = [
+      {
+        key: '1',
+        icon: () => h(PieChartOutlined),
+        label: 'One',
+        title: 'One',
+      },
+    ];
 
-  const handleCollapsedLeft = () => {
-    leftExtendFlag.value = !leftExtendFlag.value;
-  };
+    const handleCollapsedLeft = () => {
+      leftExtendFlag.value = !leftExtendFlag.value;
+    };
 
-  const handleCollapsedRight = () => {
-    rightExtendFlag.value = !rightExtendFlag.value;
-  };
+    const handleCollapsedRight = () => {
+      rightExtendFlag.value = !rightExtendFlag.value;
+    };
 
-  const init = async () => {
-    // 初始化fabric
-    initFabricCanvas(canvasRef.value, { width: workspaceRef.value?.clientWidth, height: workspaceRef.value?.clientHeight });
-    // 初始化编辑器
-    const BgdRecet = createBackgroundRect({
-      fill: 'rgba(255,255,255,1)',
-      width: 100,
-      height: 100,
-      strokeWidth: 0,
+    const handleSaveJSON = () => {
+      const canvasJSON = canvasToJSON(fabricCanvas.value as fabric.Canvas);
+      console.log(canvasJSON);
+    };
+
+    const init = async () => {
+      // 初始化fabric
+      initFabricCanvas(canvasRef.value, { width: workspaceRef.value?.clientWidth, height: workspaceRef.value?.clientHeight, backgroundColor: '#f1f1f1' });
+      registerZoomMouseWheel(fabricCanvas.value);
+      registerTransformMouseWheel(fabricCanvas.value);
+      setSelectionStyle(fabricCanvas.value);
+      // 初始化编辑器
+      const BgdRecet = createBackgroundRect({
+        fill: 'rgba(255,255,255,1)',
+        width: 100,
+        height: 100,
+        strokeWidth: 0,
+      });
+      addRect(fabricCanvas.value as any, BgdRecet);
+
+      const textBox = createRect({
+        alpha_id: uuid(),
+        left: 100,
+        top: 100,
+        fill: 'red',
+        width: 100,
+        height: 100,
+      });
+      addRect(fabricCanvas.value as any, textBox);
+
+      const result = await createFabricImage(IMG_EXAMPLE, {
+        name: uuid(),
+        left: 100,
+        top: 100
+      });
+
+      if (result) {
+        addImageOfNoSelected(fabricCanvas.value as any, result);
+      }
+    };
+
+    onMounted(() => {
+      init();
     });
-    addRect(fabricCanvas.value as any, BgdRecet);
-
-    const textBox = createRect({
-      left: 100,
-      top: 100,
-      fill: 'red',
-      width: 100,
-      height: 100,
-    });
-    addRect(fabricCanvas.value as any, textBox);
-
-    const result = await createFabricImage(IMG_EXAMPLE);
-    if (result) {
-      setBackgroundImage(fabricCanvas.value as any, result);
-    }
-  };
-
-  onMounted(() => {
-    init();
-  });
 </script>
 
 <style lang="less">
