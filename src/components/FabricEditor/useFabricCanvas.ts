@@ -72,9 +72,12 @@ const useFabricCanvas = () => {
    * @param canvasIns canvas
    * @param options 宽高
    */
-  const setCanvasDimensions = (canvasIns: fabric.Canvas, options: fabric.ICanvasDimensions) => {
+  const setCanvasDimensions = (canvasIns?: fabric.Canvas, options?: fabric.ICanvasDimensions) => {
     // 设置宽高
-    canvasIns.setDimensions(options);
+    console.log(options);
+    if (canvasIns && options) {
+      canvasIns.setDimensions(options);
+    }
   };
 
   /**
