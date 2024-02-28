@@ -17,4 +17,8 @@ declare namespace fabric {
     lastPosX?: number;
     lastPosY?: number;
   }
+
+  export interface IImageOptions {
+    alpha_id?: string;
+  }
 }

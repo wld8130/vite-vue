@@ -135,15 +135,52 @@ export const isNotEmpty = (value: any) => {
  * @param file 图片文件
  * @returns promise
  */
-export const convertImageFileToBase64 = (file: File): Promise => {
+export const convertImageFileToBase64 = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
+    reader.readAsDataURL(file);
     reader.onloadend = function () {
-      resolve(reader.result)
+      resolve(reader.result as string)
     };
     reader.onerror = () => {
       reject();
     }
-    reader.readAsDataURL(file);
   })
 };
+
+/**
+ * 获取文本文件内容
+ * @param file 文本类型文件
+ * @returns text
+ */
+export const readFileText = (file: File) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsText(file);
+    reader.onloadend = function () {
+      resolve(reader.result as string)
+    };
+    reader.onerror = () => {
+      reject();
+    }
+  })
+};
+
+/**
+ * 将json写入文件并下载文件
+ * @param jsonStr json
+ */
+export const writeJSONToFile = (jsonStr: string, fileName = 'data') => {
+  // 创建Blob对象
+  const blob = new Blob([jsonStr], { type: "application/json" });
+  // 创建临时URL
+  const url = URL.createObjectURL(blob);
+  // 创建一个链接元素
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${fileName}_${Date.now()}.json`;
+  // 模拟点击下载链接
+  link.click();
+  // 释放临时URL资源
+  URL.revokeObjectURL(url);
+}

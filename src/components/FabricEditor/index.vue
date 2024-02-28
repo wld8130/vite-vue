@@ -2,9 +2,9 @@
   <div class="fabric-editor-container">
     <div class="editor-header">
       <div class="editor-header-left">
-        <Button type="link">导入</Button>
+        <FabricImport :after-get-file="handleImportJSONFile" />
         <Divider type="vertical" />
-        <Button type="link">插入</Button>
+        <FabricImage :after-get-image="handleInsertImage" />
       </div>
       <div class="editor-header-right">
         <Button type="link">预览</Button>
@@ -30,64 +30,73 @@
   import { ref, onMounted } from 'vue';
   import { v4 as uuid } from 'uuid';
   import useFabricCanvas from './useFabricCanvas';
-  import useFabricRect from './useFabricRect';
+  // import useFabricRect from './useFabricRect';
   import useFabricImage from './useFabricImage';
-  import IMG_EXAMPLE from '/@/assets/img/example.png';
   import { fabric } from 'fabric';
+  import FabricImport from './components/FabricImport.vue';
+  import FabricImage from './components/FabricImage.vue';
+  import { isNotEmpty, writeJSONToFile } from '/@/utils/common';
 
-    const canvasRef = ref<HTMLCanvasElement | null>(null);
-    const workspaceRef = ref<HTMLDivElement | null>(null);
-    const { fabricCanvas, initFabricCanvas, addRect, addImageOfNoSelected, registerZoomMouseWheel, registerTransformMouseWheel, setSelectionStyle, canvasToJSON } = useFabricCanvas();
-    const { createBackgroundRect, createRect } = useFabricRect();
-    const { createFabricImage } = useFabricImage();
+  const canvasRef = ref<HTMLCanvasElement | null>(null);
+  const workspaceRef = ref<HTMLDivElement | null>(null);
+  const {
+    fabricCanvas,
+    initFabricCanvas,
+    // addRect,
+    addImageOfNoSelected,
+    registerZoomMouseWheel,
+    registerTransformMouseWheel,
+    setSelectionStyle,
+    canvasToJSON,
+    canvasLoadJSON
+  } = useFabricCanvas();
+  // const { createBackgroundRect, createRect } = useFabricRect();
+  const { createFabricImage } = useFabricImage();
 
-    const handleSaveJSON = () => {
-      const canvasJSON = canvasToJSON(fabricCanvas.value as fabric.Canvas);
-      console.log(canvasJSON);
-    };
+  /**
+   * 将有效的JSON文件转译
+   * @param file JSON文件
+   */
+  const handleImportJSONFile = (jsonstr: string) => {
+    if (isNotEmpty(jsonstr) && fabricCanvas.value) {
+      canvasLoadJSON(fabricCanvas.value, jsonstr);
+    }
+  };
 
-    const init = async () => {
-      // 初始化fabric
-      console.log(canvasRef.value?.clientWidth)
-      initFabricCanvas(canvasRef.value, { width: canvasRef.value?.clientWidth, height: canvasRef.value?.clientHeight, backgroundColor: '#f1f1f1' });
-      // , { width: canvasRef.value?.clientWidth, height: canvasRef.value?.clientHeight, backgroundColor: '#f1f1f1' }
-      console.log(canvasRef.value?.clientWidth)
-      registerZoomMouseWheel(fabricCanvas.value);
-      registerTransformMouseWheel(fabricCanvas.value);
-      setSelectionStyle(fabricCanvas.value);
-      // 初始化编辑器
-      const BgdRecet = createBackgroundRect({
-        fill: 'rgba(255,255,255,1)',
-        width: 100,
-        height: 100,
-        strokeWidth: 0,
-      });
-      addRect(fabricCanvas.value as any, BgdRecet);
-
-      const textBox = createRect({
+  /**
+   * 插入背景图（不可选中）
+   * @param imgBase64String 图片base64形式
+   */
+  const handleInsertImage = async (imgBase64String: string) => {
+    if (isNotEmpty(imgBase64String) && fabricCanvas.value) {
+      const result = await createFabricImage(imgBase64String, {
         alpha_id: uuid(),
-        left: 100,
-        top: 100,
-        fill: 'red',
-        width: 100,
-        height: 100,
-      });
-      addRect(fabricCanvas.value as any, textBox);
-
-      const result = await createFabricImage(IMG_EXAMPLE, {
-        name: uuid(),
         left: 100,
         top: 100
       });
-
       if (result) {
         addImageOfNoSelected(fabricCanvas.value as any, result);
       }
-    };
+    }
+  };
 
-    onMounted(() => {
-      init();
-    });
+  // 将文件保存JSON
+  const handleSaveJSON = () => {
+    const canvasJSON = canvasToJSON(fabricCanvas.value as fabric.Canvas, ['alpha_id', 'selectable']);
+    writeJSONToFile(JSON.stringify(canvasJSON), 'canvasFabric');
+  };
+
+  const init = async () => {
+    // 初始化fabric
+    initFabricCanvas(canvasRef.value, { width: canvasRef.value?.clientWidth, height: canvasRef.value?.clientHeight, backgroundColor: '#f1f1f1' });
+    registerZoomMouseWheel(fabricCanvas.value);
+    registerTransformMouseWheel(fabricCanvas.value);
+    setSelectionStyle(fabricCanvas.value);
+  };
+
+  onMounted(() => {
+    init();
+  });
 </script>
 
 <style lang="less">

@@ -189,10 +189,11 @@ const useFabricCanvas = () => {
   /**
    * canvas转JSON
    * @param canvasIns canvas
-   * @returns JSON
+   * @param customKeys keys(序列化JSON添加的key)
+   * @returns
    */
-  const canvasToJSON = (canvasIns: fabric.Canvas) => {
-    return canvasIns.toJSON();
+  const canvasToJSON = (canvasIns: fabric.Canvas, customKeys?: string[]) => {
+    return canvasIns.toJSON(customKeys);
   };
 
   /**
