@@ -15,8 +15,19 @@ const useFabricCanvas = () => {
         stopContextMenu: true, // 禁止默认右键菜单
         controlsAboveOverlay: true, // 超出clipPath后仍然展示控制条
         imageSmoothingEnabled: false, // 解决文字导出后不清晰问题
+        // preserveObjectStacking: true, // 默认false(元素对象被选中时保持在当前z轴，不会跳到最顶层)
         ...options,
       });
+    }
+  };
+
+  /**
+   * 清空画布
+   * @param canvasIns canvas
+   */
+  const clearFabricCanvas = (canvasIns: fabric.Canvas) => {
+    if (canvasIns) {
+      canvasIns.clear();
     }
   };
 
@@ -215,6 +226,7 @@ const useFabricCanvas = () => {
   return {
     fabricCanvas,
     initFabricCanvas,
+    clearFabricCanvas,
     addRect,
     addImage,
     setBackgroundImage,

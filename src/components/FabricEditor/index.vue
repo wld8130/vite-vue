@@ -9,7 +9,7 @@
       <div class="editor-header-right">
         <Button type="link">预览</Button>
         <Divider type="vertical" />
-        <Button type="link">清空</Button>
+        <Button type="link" @click="handleClear">清空</Button>
         <Divider type="vertical" />
         <Button type="primary" @click="handleSaveJSON">保存</Button>
       </div>
@@ -32,7 +32,6 @@
   import useFabricCanvas from './useFabricCanvas';
   // import useFabricRect from './useFabricRect';
   import useFabricImage from './useFabricImage';
-  import { fabric } from 'fabric';
   import FabricImport from './components/FabricImport.vue';
   import FabricImage from './components/FabricImage.vue';
   import { isNotEmpty, writeJSONToFile } from '/@/utils/common';
@@ -42,6 +41,7 @@
   const {
     fabricCanvas,
     initFabricCanvas,
+    clearFabricCanvas,
     // addRect,
     addImageOfNoSelected,
     registerZoomMouseWheel,
@@ -80,10 +80,18 @@
     }
   };
 
+  const handleClear = () => {
+    if (fabricCanvas.value) {
+      clearFabricCanvas(fabricCanvas.value);
+    }
+  }
+
   // 将文件保存JSON
   const handleSaveJSON = () => {
-    const canvasJSON = canvasToJSON(fabricCanvas.value as fabric.Canvas, ['alpha_id', 'selectable']);
-    writeJSONToFile(JSON.stringify(canvasJSON), 'canvasFabric');
+    if (fabricCanvas.value) {
+      const canvasJSON = canvasToJSON(fabricCanvas.value, ['alpha_id', 'selectable']);
+      writeJSONToFile(JSON.stringify(canvasJSON), 'canvasFabric');
+    }
   };
 
   const init = async () => {
